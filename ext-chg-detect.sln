@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ext-chg-detect", "ext-chg-detect.csproj", "{703FF584-C789-4B57-80CA-3D3600F4D153}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{703FF584-C789-4B57-80CA-3D3600F4D153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{703FF584-C789-4B57-80CA-3D3600F4D153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{703FF584-C789-4B57-80CA-3D3600F4D153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{703FF584-C789-4B57-80CA-3D3600F4D153}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {86D8050C-B5D3-43DC-A4FE-ACBA88453339}
+	EndGlobalSection
+EndGlobal
