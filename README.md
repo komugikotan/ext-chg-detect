@@ -10,6 +10,8 @@
 
 次の二つの設定を完了している場合は、次回以降の起動では設定画面が表示されません。設定は、dataフォルダの「info.ini」に記録されています。後から、「ext-change-detect.exe」を実行し設定画面を表示することで設定を変更できます。
 
+「ext-change-detect.exe」は、[このリポジトリ](https://github.com/komugikotan/ext-chg-detect-settings)にMITライセンスでアップロードされています。こちらも使用は自己責任です。
+
 ## 対応ファイル
 
 現状では、jpegとpngの画像ファイルにしか対応していません。（相互変換が可能です。）
