@@ -1,5 +1,7 @@
 # Ext-Chg-Detect
 
+![動作画面](https://raw.githubusercontent.com/komugikotan/ext-chg-detect/main/picture.png "動作画面")
+
 指定されたフォルダ内で特定のファイル（画像ファイルなど）の拡張子が変更されたことを検知して、自動的にファイル形式を変換してくれるアプリケーションです。
 
 ## 概要
