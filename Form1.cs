@@ -48,7 +48,7 @@ namespace ext_chg_detect
                         MessageBox.Show("スタートアップアプリに登録しました。このアプリはバックグラウンドで実行されるため、ウィンドウなどは表示されませんのでご注意ください。自動起動設定と、検知するフォルダーの設定は後から変更できます。");
                     }
                     else
-                    {
+                    { 
                         
                     }
 
@@ -135,6 +135,11 @@ namespace ext_chg_detect
             {
                 if (New_ext == ".png")
                 {
+                    if (!File.Exists("tmp\\" + e.OldName))
+                    {
+                        File.Copy(e.FullPath, "tmp\\" + e.OldName);
+                    }
+
                     ChangeFileExtension(e.FullPath, Old_ext);
 
                     changeFormatOfPicture(e.OldFullPath, e.FullPath, "png");
@@ -142,6 +147,11 @@ namespace ext_chg_detect
                 }
                 else if (New_ext == ".jpg")
                 {
+                    if (!File.Exists("tmp\\" + e.OldName)) {
+                        File.Copy(e.FullPath, "tmp\\" + e.OldName);
+                    }
+                    
+
                     ChangeFileExtension(e.FullPath, Old_ext);
 
                     changeFormatOfPicture(e.OldFullPath, e.FullPath, "jpg");
