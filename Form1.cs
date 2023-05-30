@@ -14,6 +14,9 @@ using System.Globalization;
 using System.Security.Cryptography;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
+//Webp用
+//using ImageProcessor;
+using ImageProcessor.Plugins.WebP.Imaging.Formats;
 
 namespace ext_chg_detect
 {
@@ -21,7 +24,6 @@ namespace ext_chg_detect
     {
         public Form1()
         {
-
 
             this.InitializeComponent();
             this.WindowState = FormWindowState.Minimized;
@@ -32,6 +34,23 @@ namespace ext_chg_detect
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Visible = false;
+
+            NotifyIcon notifyIcon;
+
+            notifyIcon = new NotifyIcon();
+            notifyIcon.Icon = new Icon("favicon.ico");
+            notifyIcon.Visible = true;
+            notifyIcon.Text = "拡張子変更ディテクター";
+
+
+            // コンテキストメニュー
+            ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+            ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem.Text = "&終了";
+            toolStripMenuItem.Click += ToolStripMenuItem_Click;
+            contextMenuStrip.Items.Add(toolStripMenuItem);
+            notifyIcon.ContextMenuStrip = contextMenuStrip;
+
 
             if (GetValueString("basic", "path", "data\\info.ini") == "")
             {
@@ -60,7 +79,6 @@ namespace ext_chg_detect
             }
             else
             {
-                
             }
 
             if (GetValueString("basic", "startup", "data\\info.ini") == "true")
@@ -70,7 +88,6 @@ namespace ext_chg_detect
             else
             {
                 UnregisterStartupApp("Ext-Change-Detect");
-
             }
 
 
@@ -96,8 +113,6 @@ namespace ext_chg_detect
             fsw.Renamed += fsw_Renamed;
             //監視を開始
             fsw.EnableRaisingEvents = true;
-
-
 
         }
 
@@ -130,31 +145,94 @@ namespace ext_chg_detect
 
             label1.Text = Old_ext;
 
+            ChangeFileExtension(e.FullPath, Old_ext);
+           
+
             //拡張子が変わっている場合のみ処理を行う
             if (Old_ext != New_ext)
             {
-                if (New_ext == ".png")
+                if (New_ext == ".png" && Old_ext == ".jpg")
                 {
                     if (!File.Exists("tmp\\" + e.OldName))
                     {
-                        File.Copy(e.FullPath, "tmp\\" + e.OldName);
+                        File.Copy(e.OldFullPath, "tmp\\" + e.OldName);
                     }
 
-                    ChangeFileExtension(e.FullPath, Old_ext);
-
-                    changeFormatOfPicture(e.OldFullPath, e.FullPath, "png");
+                    changeFormatOfPicture(e.OldFullPath, e.FullPath, "png", "jpg", e.OldName);
                     File.Delete(e.OldFullPath);
                 }
-                else if (New_ext == ".jpg")
+                else if (New_ext == ".jpg" && Old_ext == ".png")
                 {
                     if (!File.Exists("tmp\\" + e.OldName)) {
-                        File.Copy(e.FullPath, "tmp\\" + e.OldName);
+                        File.Copy(e.OldFullPath, "tmp\\" + e.OldName);
                     }
+
+                    changeFormatOfPicture(e.OldFullPath, e.FullPath, "jpg", "png", e.OldName);
+                   File.Delete(e.OldFullPath);
+                }
+                else if (New_ext == ".jpeg" && Old_ext == ".png")
+                {
+                    if (!File.Exists("tmp\\" + e.OldName))
+                    {
+                        File.Copy(e.OldFullPath, "tmp\\" + e.OldName);
+                    }
+
+                    changeFormatOfPicture(e.OldFullPath, e.FullPath, "jpg", "png", e.OldName);
+                    File.Delete(e.OldFullPath);
+                }
+                else if (New_ext == ".jpg" && Old_ext == ".webp")
+                {
+                    if (!File.Exists("tmp\\" + e.OldName))
+                    {
+                        File.Copy(e.OldFullPath, "tmp\\" + e.OldName);
+                    }
+
+                    changeFormatOfPicture(e.OldFullPath, e.FullPath, "jpg", "webp", e.OldName);
+
+                    File.Delete(e.OldFullPath);
+                }
+                else if (New_ext == ".jpeg" && Old_ext == ".webp")
+                {
+                    if (!File.Exists("tmp\\" + e.OldName))
+                    {
+                        File.Copy(e.OldFullPath, "tmp\\" + e.OldName);
+                    }
+
+                    changeFormatOfPicture(e.OldFullPath, e.FullPath, "jpg", "webp", e.OldName);
+
+                    File.Delete(e.OldFullPath);
+                }
+                else if (New_ext == ".png" && Old_ext == ".webp")
+                {
+                    if (!File.Exists("tmp\\" + e.OldName))
+                    {
+                        File.Copy(e.OldFullPath, "tmp\\" + e.OldName);
+                    }
+                        
+                    changeFormatOfPicture(e.OldFullPath, e.FullPath, "png", "webp", e.OldName);
                     
+                    File.Delete(e.OldFullPath);
+                }
+                else if (New_ext == ".webp" && Old_ext == ".jpg")
+                {
+                    if (!File.Exists("tmp\\" + e.OldName))
+                    {
+                        File.Copy(e.OldFullPath, "tmp\\" + e.OldName);
+                    }
 
-                    ChangeFileExtension(e.FullPath, Old_ext);
+                    changeFormatOfPicture(e.OldFullPath, e.FullPath, "webp", "jpg", e.OldName);
 
-                    changeFormatOfPicture(e.OldFullPath, e.FullPath, "jpg");
+                    File.Delete(e.OldFullPath);
+                }
+                else if (New_ext == ".webp" && Old_ext == ".png")
+                {
+                    if (!File.Exists("tmp\\" + e.OldName))
+                    {
+                        File.Copy(e.OldFullPath, "tmp\\" + e.OldName);
+                    }
+
+                    changeFormatOfPicture(e.OldFullPath, e.FullPath, "webp", "png", e.OldName);
+
                     File.Delete(e.OldFullPath);
                 }
 
@@ -164,68 +242,114 @@ namespace ext_chg_detect
             fsw.EnableRaisingEvents = true;
         }
 
-
-        void changeFormatOfPicture(string fromFilePath, string toFilePath, string toExt)
+        void changeFormatOfPicture(string fromFilePath, string toFilePath, string toExt, string fromExt, string OldName)
         {
-            //イメージファイルの取得先
-            String loadFile = fromFilePath;
+            //File.Copy(fromFilePath, "tmp\\" + OldName);
 
-            //イメージファイルの保存先
-            String saveFile = toFilePath;
-
-            //イメージファイルを読み込む
-            Image imageData = Image.FromFile(loadFile);
-
-            //イメージをJPEGで保存する
-            if (toExt == "jpg")
+            if (fromExt == "png")
             {
-                //新しいビットマップを作成する
-                Bitmap bmp = new Bitmap(imageData.Width, imageData.Height);
-                //Graphicsオブジェクトを作成する
-                Graphics g = Graphics.FromImage(bmp);
-                //背景を白色で塗りつぶす
-                g.Clear(Color.White);
-                //元の画像を描画する
-                g.DrawImageUnscaled(imageData, 0, 0);
-                //Graphicsオブジェクトを破棄する
-                g.Dispose();
-                //ビットマップをJPEG形式で保存する
-                bmp.Save(saveFile, ImageFormat.Jpeg);
-                //ビットマップを破棄する
-                bmp.Dispose();
-            }
-            else if (toExt == "png")
-            {
-                imageData.Save(saveFile, ImageFormat.Png);
-            }
+                if (toExt == "jpg")
+                {
+                    using (Image imageData = Image.FromFile("tmp\\" + OldName))
+                    {
+                        // 新しいビットマップを作成する
+                        Bitmap bmp = new Bitmap(imageData.Width, imageData.Height);
+                        // Graphicsオブジェクトを作成する
+                        Graphics g = Graphics.FromImage(bmp);
+                        // 背景を白色で塗りつぶす
+                        g.Clear(Color.White);
+                        // 元の画像を描画する
+                        g.DrawImageUnscaled(imageData, 0, 0);
+                        // Graphicsオブジェクトを破棄する
+                        g.Dispose();
+                        // ビットマップをJPEG形式で保存する
+                        bmp.Save(toFilePath, ImageFormat.Jpeg);
+                        // ビットマップを破棄する
+                        bmp.Dispose();
+                    }
+                }
+                else if(toExt == "webp"){
+                    var wf = new WebPFormat();
 
-            // イメージを開放する
-            imageData.Dispose();
+                    using (var image = new Bitmap("tmp\\" + OldName))
+                    {
+                        wf.Save(toFilePath, image, 0);
+                    }
+                }
+
+            }
+            else if (fromExt == "jpg")
+            {
+                if (toExt == "png")
+                {
+                    using (Image imageData = Image.FromFile("tmp\\" + OldName))
+                    {
+                        // ビットマップをJPEG形式で保存する
+                        imageData.Save(toFilePath, ImageFormat.Png);
+                        // ビットマップを破棄する
+                        imageData.Dispose();
+                    }
+                }
+                else if (toExt == "webp")
+                {
+                    var wf = new WebPFormat();
+
+                    using (var image = new Bitmap("tmp\\" + OldName))
+                    {
+                        wf.Save(toFilePath, image, 0);
+                    }
+                }
+            }
+            else if (fromExt == "webp")
+            {
+                var wf = new WebPFormat();
+
+                if (toExt == "jpg")
+                {
+                    using (var image = (Bitmap)wf.Load(new FileStream("tmp\\" + OldName, FileMode.Open, FileAccess.Read)))
+                    {
+                        image.Save(toFilePath, ImageFormat.Jpeg);
+                    }
+                }
+                else if (toExt == "png")
+                {
+                    using (var image = (Bitmap)wf.Load(new FileStream("tmp\\" + OldName, FileMode.Open, FileAccess.Read)))
+                    {
+                        image.Save(toFilePath, ImageFormat.Png);
+                    }
+                }
+            }
         }
+
 
 
 
         // ファイル名と新しい拡張子を引数にとる関数
         public static void ChangeFileExtension(string fileName, string newExtension)
         {
-            // ファイルが存在するかどうかをチェックする
-            if (File.Exists(fileName))
+            try
             {
-                // ファイルのパスと名前を分離する
-                string filePath = Path.GetDirectoryName(fileName);
-                string fileBaseName = Path.GetFileNameWithoutExtension(fileName);
+                // ファイルが存在するかどうかをチェックする
+                if (File.Exists(fileName))
+                {
+                    // ファイルのパスと名前を分離する
+                    string filePath = Path.GetDirectoryName(fileName);
+                    string fileBaseName = Path.GetFileNameWithoutExtension(fileName);
 
-                // 新しいファイル名を作る
-                string newFileName = Path.Combine(filePath, fileBaseName + newExtension);
+                    // 新しいファイル名を作る
+                    string newFileName = Path.Combine(filePath, fileBaseName + newExtension);
 
-                // ファイル名を変更する
-                File.Move(fileName, newFileName);
+                    // ファイル名を変更する
+                    File.Move(fileName, newFileName);
+                }
+                else
+                {
+                    // ファイルが存在しない場合はエラーメッセージを表示する
+                    Console.WriteLine("ファイルが見つかりませんでした。");
+                }
             }
-            else
-            {
-                // ファイルが存在しない場合はエラーメッセージを表示する
-                Console.WriteLine("ファイルが見つかりませんでした。");
-            }
+            catch { }
+            
         }
 
         public static void RegisterStartupApp(string appName, string appPath)
@@ -298,6 +422,13 @@ namespace ext_chg_detect
         public bool SetValueString(string section, string key, string value, string fileName)
         {
             return WritePrivateProfileString(section, key, value, fileName);
+        }
+         
+        private void ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // アプリケーションの終了
+            Application.Restart();
+            Environment.Exit(0);
         }
 
 

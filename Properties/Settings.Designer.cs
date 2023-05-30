@@ -26,12 +26,12 @@ namespace ext_chg_detect.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string directory {
+        public string tmp_delete_path {
             get {
-                return ((string)(this["directory"]));
+                return ((string)(this["tmp_delete_path"]));
             }
             set {
-                this["directory"] = value;
+                this["tmp_delete_path"] = value;
             }
         }
     }
